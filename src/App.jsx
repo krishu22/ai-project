@@ -1,8 +1,8 @@
 import "./App.css";
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import PromptPage from "./pages/PromptPage";
 import HomePage from "./pages/HomePage";
-import ResultDisplay from "./components/core/ResultDisplay";
 
 function App() {
 
@@ -10,7 +10,7 @@ function App() {
         <Router>
             <Routes>
                   <Route path="/" element={<HomePage/>} />
-                  <Route path="/result" element={<ResultDisplay/>} />
+                  <Route path="/prompt" element={<PromptPage/>} />
             </Routes>
         </Router>
   );
