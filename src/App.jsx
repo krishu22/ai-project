@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage";
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
 import AboutUs from "./pages/AboutUs";
+import History from "./components/core/History";
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
                   <Route path="/" element={<HomePage/>} />
                   <Route path="/prompt" element={<PromptPage/>} />
                   <Route path="/about" element={<AboutUs/>}/>
+                  <Route path="/history" element={<History/>}/>
             </Routes>
             <Footer/>
         </Router>

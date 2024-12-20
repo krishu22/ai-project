@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-//import OpenAI from "openai";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { useNavigate } from "react-router-dom"; 
+import { useDispatch, useSelector } from "react-redux"; 
 import axios from "axios";
+import { addHistoryItem } from "../../slices/historySlice";
 
 const PromptInput = () => {
-
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null); // New error state
+  const [error, setError] = useState(null); // Error state for managing errors
   const [responseText, setResponseText] = useState(""); // Stores the full response
   const [displayedText, setDisplayedText] = useState(""); // Stores the dynamically displayed text
+
+  const history = useSelector((state) => state.history.history); // Access history from Redux store
+  const dispatch = useDispatch(); // Dispatch action to update history
   const navigate = useNavigate();
 
-  const submitHandler = async (event) => {
+  const goToHistoryPage = () => {
+    navigate("/history");
+  };
 
+  // Handle form submit
+  const submitHandler = async (event) => {
     event.preventDefault();
 
     if (!prompt.trim()) {
@@ -31,32 +37,36 @@ const PromptInput = () => {
     try {
       console.log("Loading..");
 
-      const response = await axios ({
-        url:"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDzzLAYxe6PJiBrh_dL5B020aO6pIZx6NQ",
-        method:"post",
-        data:{
-          contents:[
-            {parts:[{text:prompt}]},
-          ],
+      const response = await axios({
+        url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDzzLAYxe6PJiBrh_dL5B020aO6pIZx6NQ",
+        method: "post",
+        data: {
+          contents: [{ parts: [{ text: prompt }] }],
         },
-      })
+      });
 
-      console.log("Response : ",response);
+      console.log("Response: ", response);
 
       const generatedText = response?.data?.candidates?.[0]?.content?.parts?.[0]?.text || "No response found.";
       setResponseText(generatedText);
-      console.log("Generated text : ",generatedText); 
-      
+      console.log("Generated text: ", generatedText);
+
+      const historyEntry = {
+        prompt: prompt,
+        generatedText: generatedText,
+        timestamp: new Date().toISOString(),
+      };
+      dispatch(addHistoryItem(historyEntry)); 
+
     } catch (error) {
-      console.error("Error generating content : ", error);
-      alert(
-        "There was an error processing your prompt. Please try again later."
-      );
+      console.error("Error generating content: ", error);
+      setError("There was an error processing your prompt. Please try again later.");
     } finally {
       setLoading(false);
     }
   };
 
+  // Typewriter effect for response text
   useEffect(() => {
     if (responseText) {
       let index = 0;
@@ -78,8 +88,6 @@ const PromptInput = () => {
     }
   }, [responseText]);
 
-
-
   return (
     <div className="bg-white shadow-md p-6 rounded-lg">
       <h2 className="text-xl font-bold mb-4">Enter Your Prompt</h2>
@@ -100,14 +108,23 @@ const PromptInput = () => {
         </button>
       </form>
 
-      {loading && <p className="text-gray-500 mt-4">
-        Generating your response...
-      </p>}
+      {loading && <p className="text-gray-500 mt-4">Generating your response...</p>}
 
-      {responseText && <div className="bg-gray-100 p-4 rounded-lg mt-4">
-          <h3 className="text-lg font-bold mb-2">Response : </h3>
+      {error && <p className="text-red-500 mt-4">{error}</p>} {/* Display error if present */}
+
+      {responseText && (
+        <div className="bg-gray-100 p-4 rounded-lg mt-4">
+          <h3 className="text-lg font-bold mb-2">Response: </h3>
           <p className="whitespace-pre-wrap">{displayedText}</p>
-      </div>}
+        </div>
+      )}
+
+      <button
+        className="mt-4 bg-green-600 text-white py-2 px-4 rounded-lg"
+        onClick={goToHistoryPage}
+      >
+        Go to History Page
+      </button>
 
     </div>
   );
