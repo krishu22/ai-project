@@ -5,9 +5,19 @@ const Header = () => {
         return (
                 <div>
 
-                        <header className="bg-gray-800 text-white py-4">
-                                <div className="container mx-auto px-4">
-                                        <h1 className="text-2xl font-bold">AI Prompt Tool</h1>
+                        <header className="bg-gray-800 text-white py-4 sticky absolute top-0 z-50">
+                                <div className="container mx-auto px-4 flex flex-row justify-around items-center">
+                                        <h1 className="text-3xl font-bold">AIverse</h1>
+                                        <nav>
+                                                <ul className='flex flex-row gap-7 items-center'>
+                                                        <li><a href="/" class="text-white hover:text-gray-200">Home</a></li>
+                                                        <li><a href="/features" class="text-white hover:text-gray-200">Features</a></li>
+                                                        <li><a href="/prompt" class="text-white hover:text-gray-200">Enter Chat</a></li>
+                                                        <li><a href="/about" class="text-white hover:text-gray-200">About Us</a></li>
+                                                        <li><a href="/support" class="text-white hover:text-gray-200">Support</a></li>
+                                                </ul>
+                                        </nav>
+                                        <p><a href="/cta" class="bg-indigo-500 px-4 py-2 rounded-md text-white hover:bg-blue-800">Get Started</a></p>
                                 </div>
                         </header>
       

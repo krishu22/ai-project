@@ -18,7 +18,7 @@ const HomePage = () => {
 
         return (
                 <div className="p-8">
-                        <main className='container mx-auto px-4 py-8'>
+                        <main className='container mx-auto h-[100vh] px-4 py-8'>
                                 <PromptInput/>
                         </main>
                 </div>

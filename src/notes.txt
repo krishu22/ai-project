@@ -35,3 +35,6 @@ completion.then((result) => console.log(result.choices[0].message));
 
 
 
+google gemini AIzaSyDzzLAYxe6PJiBrh_dL5B020aO6pIZx6NQ
+
+
