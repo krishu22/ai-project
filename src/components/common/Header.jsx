@@ -11,10 +11,8 @@ const Header = () => {
                                         <nav>
                                                 <ul className='flex flex-row gap-7 items-center'>
                                                         <li><a href="/" class="text-white hover:text-gray-200">Home</a></li>
-                                                        <li><a href="/features" class="text-white hover:text-gray-200">Features</a></li>
                                                         <li><a href="/prompt" class="text-white hover:text-gray-200">Enter Chat</a></li>
-                                                        <li><a href="/about" class="text-white hover:text-gray-200">About Us</a></li>
-                                                        <li><a href="/support" class="text-white hover:text-gray-200">Support</a></li>
+                                                        <li><a href="/quiz" class="text-white hover:text-gray-200">Take a Quiz</a></li>
                                                 </ul>
                                         </nav>
                                         <p><a href="/cta" class="bg-indigo-500 px-4 py-2 rounded-md text-white hover:bg-blue-800">Get Started</a></p>

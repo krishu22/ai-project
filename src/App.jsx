@@ -5,8 +5,9 @@ import PromptPage from "./pages/PromptPage";
 import HomePage from "./pages/HomePage";
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
-import AboutUs from "./pages/AboutUs";
 import History from "./components/core/History";
+import Quiz from "./pages/QuizPage";
+import TakeQuiz from "./pages/TakeQuiz";
 
 function App() {
 
@@ -16,8 +17,9 @@ function App() {
             <Routes>
                   <Route path="/" element={<HomePage/>} />
                   <Route path="/prompt" element={<PromptPage/>} />
-                  <Route path="/about" element={<AboutUs/>}/>
                   <Route path="/history" element={<History/>}/>
+                  <Route path="/quiz" element={<Quiz/>}/>
+                  <Route path="/takequiz" element={<TakeQuiz/>} />
             </Routes>
             <Footer/>
         </Router>

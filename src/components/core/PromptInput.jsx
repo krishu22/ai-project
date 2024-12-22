@@ -5,6 +5,7 @@ import axios from "axios";
 import { addHistoryItem } from "../../slices/historySlice";
 
 const PromptInput = () => {
+  
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null); // Error state for managing errors
@@ -82,7 +83,7 @@ const PromptInput = () => {
         } else {
           clearInterval(typingEffect);
         }
-      }, 50);
+      }, 25);
 
       return () => clearInterval(typingEffect);
     }
