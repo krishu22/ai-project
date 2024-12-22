@@ -1,9 +1,13 @@
 import React from 'react'
 import { useState, useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
-import QuestionCard from '../components/quiz/QuestionCard';
+import QuestionCardMcq from '../components/quiz/QuestionCardMcq';
 import axios from 'axios';
-import DisplayAnswerPage from './DisplayAnswerPage';
+import DisplayMcqAnswerPage from './DisplayMcqAnswerPage';
+import QuestionCardFitb from '../components/quiz/QuestionCardFitb';
+import DisplayFitbAnswerPage from './DisplayFitbAnswerPage';
+import QuestionCardTF from '../components/quiz/QuestionCardTF';
+import DisplayTfAnswerPage from './DisplayTfAnswerPage';
 
 
 const TakeQuiz = () => {
@@ -18,28 +22,68 @@ const TakeQuiz = () => {
         const [currentQues, setCurrentQues] = useState(0);
         const [selectedAnswers, setSelectedAnswers] = useState([]);
 
+        const [fitbAnswers, setFitbAnswers] = useState([]);
+        const [tfAnswers, setTfAnswers] = useState([]);
         
 
         const [quizSubmitted, setQuizSubmitted] = useState(false);
 
-        const prompt = `Generate a set of quiz questions having 4 choices and 1 correct answer based on the following data given in JSON format : 
+        const promptMcq = `Generate a set of quiz questions having 4 choices and 1 correct answer based on the following data given in JSON format : 
         
         ${JSON.stringify(formData)} 
         
-        Generate the questions in json format. Each object must contain the following attributes : question, options, answer, hint, explanation, difficulty, subject, topic. Leave the attribute as null if it does not have any value. Return the JSON only`
+        Generate the questions in json format. Each object must contain the following attributes : question, options, answer, hint, explanation, difficulty, subject, topic. Leave the attribute as null if it does not have any value. Return the JSON only`;
+
+        const promptFitb = `Generate a set of quiz questions of fill in the blanks type based on the following data given in JSON format : 
+
+        ${JSON.stringify(formData)}
+
+        Generate the questions in json format. Each object must contain the following attributes : question, answer, hint, explanation, difficulty, subject, topic. Leave the attribute as null if it does not have any value. Return the JSON only`;
+
+        const promptTF = `Generate a set of quiz questions of True and False type based on the following data given in JSON format :
+
+        ${JSON.stringify(formData)}
+
+        Generate the questions in json format. Each object must contain the following attributes : question, answer("True" or "False"), hint, explanation, difficulty, subject, topic. Leave the attribute as null if it does not have any value. Return the JSON only`;
+
+        console.log(promptMcq);
+        console.log(promptFitb);
 
         const fetchQuiz = async () => {
                 console.log("Loading...");
                 setError(null);
                 setLoading(true);
+                let response = null;
+                console.log("FORMDATA : ",formData);
                 try{
-                        const response = await axios ({
-                                url:"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDzzLAYxe6PJiBrh_dL5B020aO6pIZx6NQ",
-                                method:"post",
-                                data:{
-                                        contents:[{parts : [{text:prompt}]}],
-                                },
-                        });
+                        if (formData?.typeOfQuestions && formData.typeOfQuestions === "MCQs"){
+                                response = await axios ({
+                                        url:"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDzzLAYxe6PJiBrh_dL5B020aO6pIZx6NQ",
+                                        method:"post",
+                                        data:{
+                                                contents:[{parts : [{text:promptMcq}]}],
+                                        },
+                                });
+                        }
+                        else if (formData?.typeOfQuestions && formData.typeOfQuestions === "Fill in the Blank"){
+                                response = await axios ({
+                                        url:"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDzzLAYxe6PJiBrh_dL5B020aO6pIZx6NQ",
+                                        method:"post",
+                                        data:{
+                                                contents:[{parts : [{text:promptFitb}]}],
+                                        },
+                                });
+                        }
+                        else if (formData?.typeOfQuestions && formData.typeOfQuestions === "True/False"){
+                                response = await axios ({
+                                        url:"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDzzLAYxe6PJiBrh_dL5B020aO6pIZx6NQ",
+                                        method:"post",
+                                        data:{
+                                                contents:[{parts : [{text:promptTF}]}],
+                                        },
+                                });
+                        }
+                        
                         console.log("Original Response from the API : ", response);
 
                         if (response.data && response.data.candidates.length > 0) {
@@ -133,7 +177,7 @@ const TakeQuiz = () => {
         }
 
 
-      /*  const stringToJson = (inputString) => {
+        const stringToJson = (inputString) => {
 
                 if (!inputString) {
                     console.error("Invalid input string passed to JSON parser:", inputString);
@@ -152,7 +196,7 @@ const TakeQuiz = () => {
                     return null;
                 }
         };
-*/
+
         if (loading) return <p className="text-center text-blue-600">Loading...</p>;
     if (error) return <p className="text-center text-red-600">{error}</p>;
     console.log("Quiz before p : ",quiz);
@@ -172,26 +216,78 @@ const TakeQuiz = () => {
 
                         {!quizSubmitted ? 
                                 <div>
-                                        <QuestionCard
-                                                question={currentQuiz.question} // string
-                                                options={currentQuiz.options} // array of strings
-                                                totalQuestions={quiz.length} // no. of ques total
-                                                handleNext={nextQues} // nextques func
-                                                handlePrevious={prevQues} // prevques func
-                                                handleSubmit={handleSubmit} // submit func
-                                                quizSubmitted={quizSubmitted} // bool ; quiz submitted or not
-                                                isLastQuestion={currentQues === quiz.length - 1} // bool ; last ques or not
-                                                isFirstQuestion={currentQues === 0} // same as above
-                                                selectedAnswers={selectedAnswers} // array of indexes of selected answers
-                                                setSelectedAnswers={setSelectedAnswers} // set
-                                                questionIndex={currentQues}
-                                        /> 
+                                        {
+                                                formData.typeOfQuestions === "MCQs" && 
+                                                <QuestionCardMcq
+                                                        question={currentQuiz.question} // string
+                                                        options={currentQuiz.options} // array of strings
+                                                        totalQuestions={quiz.length} // no. of ques total
+                                                        handleNext={nextQues} // nextques func
+                                                        handlePrevious={prevQues} // prevques func
+                                                        handleSubmit={handleSubmit} // submit func
+                                                        quizSubmitted={quizSubmitted} // bool ; quiz submitted or not
+                                                        isLastQuestion={currentQues === quiz.length - 1} // bool ; last ques or not
+                                                        isFirstQuestion={currentQues === 0} // same as above
+                                                        selectedAnswers={selectedAnswers} // array of indexes of selected answers
+                                                        setSelectedAnswers={setSelectedAnswers} // set
+                                                        questionIndex={currentQues}
+                                                /> 
+                                        }
+                                        {
+                                                formData.typeOfQuestions === "Fill in the Blank" && 
+                                                <QuestionCardFitb
+                                                        question={currentQuiz.question} // string
+                                                        totalQuestions={quiz.length} // no. of ques total
+                                                        handleNext={nextQues} // nextques func
+                                                        handlePrevious={prevQues} // prevques func
+                                                        handleSubmit={handleSubmit} // submit func
+                                                        quizSubmitted={quizSubmitted} // bool ; quiz submitted or not
+                                                        isLastQuestion={currentQues === quiz.length - 1} // bool ; last ques or not
+                                                        isFirstQuestion={currentQues === 0} // same as above
+                                                        fitbAnswers={fitbAnswers} // array of indexes of selected answers
+                                                        setFitbAnswers={setFitbAnswers} // set
+                                                        questionIndex={currentQues}
+                                                /> 
+                                        }  
+                                        {
+                                                formData.typeOfQuestions === "True/False" && 
+                                                <QuestionCardTF 
+                                                        question={currentQuiz.question} // string
+                                                        totalQuestions={quiz.length} // no. of ques total
+                                                        handleNext={nextQues} // nextques func
+                                                        handlePrevious={prevQues} // prevques func
+                                                        handleSubmit={handleSubmit} // submit func
+                                                        quizSubmitted={quizSubmitted} // bool ; quiz submitted or not
+                                                        isLastQuestion={currentQues === quiz.length - 1} // bool ; last ques or not
+                                                        isFirstQuestion={currentQues === 0} // same as above
+                                                        tfAnswers={tfAnswers} // array of indexes of selected answers
+                                                        setTfAnswers={setTfAnswers} // set
+                                                        questionIndex={currentQues}
+                                                />
+                                        }
                                 </div> : 
                                 <div>
-                                        <DisplayAnswerPage
-                                                selectedAnswers={selectedAnswers}
-                                                questions={quiz}
-                                        />
+                                        {
+                                                formData.typeOfQuestions === "MCQs" && 
+                                                <DisplayMcqAnswerPage
+                                                        selectedAnswers={selectedAnswers}
+                                                        questions={quiz}
+                                                />
+                                        }
+                                        {
+                                                formData.typeOfQuestions === "Fill in the Blank" &&
+                                                <DisplayFitbAnswerPage 
+                                                        fitbAnswers={fitbAnswers}
+                                                        questions={quiz}
+                                                />
+                                        }
+                                        {
+                                                formData.typeOfQuestions === "True/False" && 
+                                                <DisplayTfAnswerPage
+                                                        tfAnswers={tfAnswers}
+                                                        questions={quiz}
+                                                />
+                                        }
                                 </div>   
                         }
 

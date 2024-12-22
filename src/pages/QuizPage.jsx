@@ -19,7 +19,8 @@ const QuizPage = () => {
                 currentTopic:"",
                 numberOfQuestions:"",
                 time:"",
-                typeOfQuestions:""
+                typeOfQuestions:null,
+               // typeOfQuiz:"",
         });
 
         const [formSubmitted, setFormSubmitted] = useState(false);
@@ -121,7 +122,7 @@ const QuizPage = () => {
         }));
       };*/
 
-        
+        console.log("formdata submitted : ",formData);
             
             
 
@@ -227,6 +228,40 @@ const QuizPage = () => {
                                         checked={formData.breakIntoSubtopics}
                                         onChange={handleChange}
                                 />
+
+                                <br/>
+
+                                <label>Type of Questions</label>
+                                <label>
+                                        <input
+                                                type="radio"
+                                                name="typeOfQuestions"
+                                                value="MCQs"
+                                                checked={formData.typeOfQuestions === "MCQs"}
+                                                onChange={handleChange}
+                                        />
+                                                MCQs
+                                </label>
+                                <label>
+                                        <input
+                                                type="radio"
+                                                name="typeOfQuestions"
+                                                value="Fill in the Blank"
+                                                checked={formData.typeOfQuestions === "Fill in the Blank"}
+                                                onChange={handleChange}
+                                        />
+                                                Fill in the Blank
+                                </label>
+                                <label>
+                                        <input
+                                                type="radio"
+                                                name="typeOfQuestions"
+                                                value="True/False"
+                                                checked={formData.typeOfQuestions === "True/False"}
+                                                onChange={handleChange}
+                                        />
+                                                True/False
+                                </label>
 
                                 {/* Subjects Section */}
                                 <div className="mb-6">

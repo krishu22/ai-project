@@ -6,7 +6,7 @@ const SuccessMessage = ({ formData }) => {
 
     const clickHandler = (event) => {
         event.preventDefault();
-        navigate('/takequiz',{state:formData});
+        navigate('/takequiz',{state:{...formData}});
     };
 
     return (
@@ -32,6 +32,7 @@ const SuccessMessage = ({ formData }) => {
                     <p><strong className="font-medium">Topics:</strong> {formData.topics.join(', ')}</p>
                     <p><strong className="font-medium">Quiz Mode:</strong> {formData.quizMode}</p>
                     <p><strong className="font-medium">Number of Questions:</strong> {formData.numberOfQuestions}</p>
+                    <p><strong className="font-medium">Type of Questions:</strong> {formData.typeOfQuestions}</p>
 
                     {formData.addHints && <p><strong className="font-medium">Hints:</strong> Enabled</p>}
                     {formData.answerExplanation ?

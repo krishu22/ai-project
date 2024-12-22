@@ -1,7 +1,7 @@
 import React from 'react'
 import Answer from '../components/quiz/Answer'
 
-const DisplayAnswerPage = ({selectedAnswers, questions}) => {
+const DisplayMcqAnswerPage = ({selectedAnswers, questions}) => {
 
         console.log("Display answer page props : ", selectedAnswers)
 
@@ -32,4 +32,4 @@ const DisplayAnswerPage = ({selectedAnswers, questions}) => {
 
 }
 
-export default DisplayAnswerPage
+export default DisplayMcqAnswerPage
