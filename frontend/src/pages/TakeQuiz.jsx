@@ -12,6 +12,8 @@ import DisplayTfAnswerPage from './DisplayTfAnswerPage';
 
 const TakeQuiz = () => {
 
+        const apiUrl = process.env.REACT_APP_API_KEY;
+
         const location = useLocation();
         const { state: formData } = location;
 
@@ -58,7 +60,7 @@ const TakeQuiz = () => {
                 try{
                         if (formData?.typeOfQuestions && formData.typeOfQuestions === "MCQs"){
                                 response = await axios ({
-                                        url:"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDzzLAYxe6PJiBrh_dL5B020aO6pIZx6NQ",
+                                        url:`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiUrl}`,
                                         method:"post",
                                         data:{
                                                 contents:[{parts : [{text:promptMcq}]}],
@@ -67,7 +69,7 @@ const TakeQuiz = () => {
                         }
                         else if (formData?.typeOfQuestions && formData.typeOfQuestions === "Fill in the Blank"){
                                 response = await axios ({
-                                        url:"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDzzLAYxe6PJiBrh_dL5B020aO6pIZx6NQ",
+                                        url:`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiUrl}`,
                                         method:"post",
                                         data:{
                                                 contents:[{parts : [{text:promptFitb}]}],
@@ -76,7 +78,7 @@ const TakeQuiz = () => {
                         }
                         else if (formData?.typeOfQuestions && formData.typeOfQuestions === "True/False"){
                                 response = await axios ({
-                                        url:"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDzzLAYxe6PJiBrh_dL5B020aO6pIZx6NQ",
+                                        url:`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiUrl}`,
                                         method:"post",
                                         data:{
                                                 contents:[{parts : [{text:promptTF}]}],
