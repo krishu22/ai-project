@@ -15,6 +15,7 @@ const PromptInput = () => {
   const history = useSelector((state) => state.history.history); // Access history from Redux store
   const dispatch = useDispatch(); // Dispatch action to update history
   const navigate = useNavigate();
+  const apiUrl = process.env.REACT_APP_API_KEY;
 
   const goToHistoryPage = () => {
     navigate("/history");
@@ -39,7 +40,7 @@ const PromptInput = () => {
       console.log("Loading..");
 
       const response = await axios({
-        url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDzzLAYxe6PJiBrh_dL5B020aO6pIZx6NQ",
+        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiUrl}`,
         method: "post",
         data: {
           contents: [{ parts: [{ text: prompt }] }],
